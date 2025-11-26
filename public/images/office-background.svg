@@ -1,0 +1,39 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Main Background Gradient -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#93c5fd;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Secondary Gradient -->
+    <radialGradient id="accentGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#1e40af;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:0.1" />
+    </radialGradient>
+    
+    <!-- Overlay Gradient -->
+    <linearGradient id="overlayGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:0.2" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main Background -->
+  <rect width="1920" height="1080" fill="url(#mainGradient)"/>
+  
+  <!-- Accent Overlay -->
+  <rect width="1920" height="1080" fill="url(#accentGradient)"/>
+  
+  <!-- Side Overlay for Login Area -->
+  <rect x="1200" y="0" width="720" height="1080" fill="url(#overlayGradient)"/>
+  
+  <!-- Subtle Pattern Overlay -->
+  <rect width="1920" height="1080" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" opacity="0.3"/>
+  
+</svg>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Integração PrimePay7 - EXEMPLO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+
+        .endpoint {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+
+        .method {
+            background: #38a169;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .method.post {
+            background: #3182ce;
+        }
+
+        .info-box {
+            background: #e6fffa;
+            border: 1px solid #81e6d9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .warning-box {
+            background: #fef5e7;
+            border: 1px solid #f6ad55;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .success-box {
+            background: #f0fff4;
+            border: 1px solid #68d391;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        h1 {
+            color: #2d3748;
+        }
+
+        h2 {
+            color: #4a5568;
+        }
+
+        h3 {
+            color: #718096;
+        }
+
+        .code {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Integração PrimePay7 - EXEMPLO</h1>
+            <p>Teste de integração da adquirente PrimePay7 seguindo o padrão BSPay</p>
+        </div>
+
+        <div class="success-box">
+            <h3>✅ Integração Concluída com Sucesso!</h3>
+            <p>A integração da PrimePay7 foi implementada seguindo o padrão da BSPay, incluindo:</p>
+            <ul>
+                <li>✅ Modelo PrimePay7 para configurações</li>
+                <li>✅ PrimePay7Service para comunicação com API</li>
+                <li>✅ PrimePay7Controller para callbacks</li>
+                <li>✅ PrimePay7Trait para cash-in e cash-out</li>
+                <li>✅ Interface administrativa</li>
+                <li>✅ Rotas configuradas</li>
+                <li>✅ Migrations executadas</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Configuração</h2>
+            <p>Para configurar a PrimePay7, acesse:</p>
+            <div class="endpoint">
+                <span class="method">GET</span> /admin/ajustes/adquirentes
+            </div>
+            <p>Configure os seguintes campos:</p>
+
+            <h3>🔑 Chaves de Autenticação:</h3>
+            <ul>
+                <li><strong>Chave Privada:</strong> <code>sk_...</code> - Para operações sensíveis (saques)</li>
+                <li><strong>Chave Pública:</strong> <code>pk_...</code> - Para operações públicas (depósitos)</li>
+                <li><strong>Chave de Saque Externo:</strong> <code>wk_...</code> - Para transferências externas</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>💡 Importante:</strong> A PrimePay7 usa apenas as 3 chaves acima.
+                <strong>NÃO é necessário</strong> Client ID ou Client Secret!
+            </div>
+
+            <h3>⚙️ Configurações Gerais:</h3>
+            <ul>
+                <li><strong>URL:</strong> https://api.primepay7.com (produção) ou https://api-sandbox.primepay7.com
+                    (sandbox)</li>
+                <li><strong>Sandbox:</strong> Ative para ambiente de teste</li>
+                <li><strong>Status:</strong> Ative para usar a adquirente</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>💡 Suas Chaves:</strong><br>
+                <strong>Chave Privada:</strong> <code>sk_a3zrOT6aw4tuwPT74shv1B5IiVfSD-2W2R6IPGdTDePVYAYB</code><br>
+                <strong>Chave Pública:</strong> <code>pk_n9UwSs672Pu5CS4h61qj_18rPRye4qnO8pSIHmYssnFOqSIS</code><br>
+                <strong>Chave de Saque:</strong> <code>wk_0oRDaq9JE6yH2A3Ex4TNLeIYZ-Fv2pi9YZqcnLibmkZnKuED</code>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💰 Cash-In (Depósitos)</h2>
+            <p>A PrimePay7 suporta depósitos via PIX através de QR Code dinâmico:</p>
+
+            <h3>Endpoint de Depósito:</h3>
+            <div class="endpoint">
+                <span class="method post">POST</span> /api/wallet/deposit/payment
+            </div>
+
+            <h3>Parâmetros:</h3>
+            <div class="code">
+                {
+                "token": "seu_token",
+                "secret": "seu_secret",
+                "amount": 100.00,
+                "debtor_name": "Nome do Cliente",
+                "email": "redacted@example.invalid",
+                "phone": "11999999999",
+                "method_pay": "pix",
+                "postback": "https://seu-site.com/webhook"
+                }
+            </div>
+
+            <h3>Resposta:</h3>
+            <div class="code">
+                {
+                "status": "success",
+                "data": {
+                "qr_code": "00020126360014BR.GOV.BCB.PIX...",
+                "qr_code_text": "Texto do QR Code",
+                "transaction_id": "uuid-da-transacao",
+                "amount": 100.00,
+                "expires_at": "2025-09-29T15:30:00Z",
+                "pix_key": "chave-pix-da-conta"
+                }
+                }
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💸 Cash-Out (Saques)</h2>
+            <p>A PrimePay7 suporta saques via PIX:</p>
+
+            <h3>Endpoint de Saque:</h3>
+            <div class="endpoint">
+                <span class="method post">POST</span> /api/pixout
+            </div>
+
+            <h3>Parâmetros:</h3>
+            <div class="code">
+                {
+                "token": "seu_token",
+                "secret": "seu_secret",
+                "amount": 50.00,
+                "pixKey": "11999999999",
+                "pixKeyType": "phone",
+                "baasPostbackUrl": "web"
+                }
+            </div>
+
+            <h3>Resposta:</h3>
+            <div class="code">
+                {
+                "status": "success",
+                "data": {
+                "transaction_id": "uuid-da-transacao",
+                "amount": 50.00,
+                "status": "PROCESSING"
+                }
+                }
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔄 Callbacks</h2>
+            <p>A PrimePay7 enviará notificações para os seguintes endpoints:</p>
+
+            <h3>🎯 Callback Unificado (Recomendado):</h3>
+            <div class="endpoint">
+                <span class="method post">POST</span> /api/primepay7/callback
+            </div>
+            <div class="success-box">
+                <strong>✨ Novo!</strong> Este endpoint detecta automaticamente se é um depósito ou saque baseado no
+                conteúdo da requisição.
+                Configure apenas este URL no painel da PrimePay7 para simplificar a configuração.
+            </div>
+
+            <h3>Callbacks Específicos (Opcionais):</h3>
+            <div class="endpoint">
+                <span class="method post">POST</span> /api/primepay7/callback/deposit
+            </div>
+
+            <div class="endpoint">
+                <span class="method post">POST</span> /api/primepay7/callback/withdraw
+            </div>
+
+            <h3>Webhook Geral:</h3>
+            <div class="endpoint">
+                <span class="method post">POST</span> /api/primepay7/webhook
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Recomendação:</strong> Use apenas o callback unificado <code>/api/primepay7/callback</code>
+                para simplificar a configuração.
+                O sistema detectará automaticamente o tipo de transação.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🤖 Detecção Automática de Transações</h2>
+            <p>O callback unificado detecta automaticamente o tipo de transação analisando:</p>
+
+            <h3>Campos Analisados:</h3>
+            <ul>
+                <li><strong>transaction_type:</strong> "deposit" ou "withdraw"</li>
+                <li><strong>type:</strong> Tipo da transação</li>
+                <li><strong>event:</strong> Tipo do evento (payment.received, withdraw.completed, etc.)</li>
+                <li><strong>status:</strong> Status da transação</li>
+                <li><strong>direction/flow:</strong> Direção da transação ("in" = depósito, "out" = saque)</li>
+                <li><strong>amount:</strong> Valor positivo = depósito, negativo = saque</li>
+                <li><strong>description:</strong> Descrição contendo palavras-chave</li>
+                <li><strong>category:</strong> Categoria da transação</li>
+                <li><strong>operation:</strong> Tipo de operação</li>
+                <li><strong>transaction_id:</strong> Consulta no banco de dados</li>
+            </ul>
+
+            <h3>Exemplos de Detecção:</h3>
+            <div class="code">
+                // Depósito detectado por:
+                {
+                "transaction_type": "deposit",
+                "status": "PAID",
+                "amount": 100.00
+                }
+
+                // Saque detectado por:
+                {
+                "event": "withdraw.completed",
+                "status": "COMPLETED",
+                "amount": -50.00
+                }
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Status das Transações</h2>
+            <p>Os status suportados pela PrimePay7 são:</p>
+            <ul>
+                <li><strong>PAID/APPROVED/COMPLETED:</strong> Transação aprovada</li>
+                <li><strong>FAILED/REJECTED/CANCELLED:</strong> Transação rejeitada</li>
+                <li><strong>PENDING/PROCESSING:</strong> Transação em processamento</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🔐 Autenticação</h2>
+            <p>A PrimePay7 utiliza autenticação OAuth2 com Client Credentials:</p>
+            <div class="code">
+                1. Enviar client_id e client_secret para /auth/token
+                2. Receber access_token
+                3. Usar access_token no header Authorization: Bearer {token}
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h3>⚠️ Próximos Passos</h3>
+            <ol>
+                <li>Configure suas credenciais da PrimePay7 no painel administrativo</li>
+                <li><strong>Configure o webhook unificado:</strong>
+                    <code>https://app.gateway.shop/api/primepay7/callback</code>
+                </li>
+                <li>Teste em ambiente sandbox primeiro</li>
+                <li>Ative a adquirente quando estiver pronto para produção</li>
+                <li>Configure como adquirente padrão se necessário</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>📚 Documentação</h2>
+            <p>Para mais informações sobre a API da PrimePay7, consulte:</p>
+            <ul>
+                <li><a href="https://bank.primepay7.com/docs/intro/first-steps" target="_blank">Documentação Oficial
+                        PrimePay7</a></li>
+                <li><a href="https://app.gateway.shop/admin/ajustes/adquirentes" target="_blank">Painel de Configuração
+                        EXEMPLO</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

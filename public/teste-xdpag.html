@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste XDPag - Gateway</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .section h2 {
+            color: #555;
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .webhook-example {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        .webhook-example h3 {
+            margin-top: 0;
+        }
+
+        .webhook-example pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🧪 Teste XDPag - Gateway</h1>
+
+        <div class="section">
+            <h2>📋 Informações da Adquirente</h2>
+            <p><strong>Nome:</strong> XDPag</p>
+            <p><strong>Referência:</strong> xdpag</p>
+            <p><strong>URL Base:</strong> https://api.xdpag.com</p>
+            <p><strong>Status:</strong> Integração completa com Cash In e Cash Out</p>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Configuração</h2>
+            <p>Para configurar a XDPag, acesse: <strong>Admin → Ajustes → Adquirentes</strong></p>
+            <p>Campos necessários:</p>
+            <ul>
+                <li><strong>Client ID:</strong> ID do cliente fornecido pela XDPag</li>
+                <li><strong>Client Secret:</strong> Chave secreta do cliente</li>
+                <li><strong>URL:</strong> URL da API (https://api.xdpag.com)</li>
+                <li><strong>Webhook Secret:</strong> Chave secreta para validação dos webhooks</li>
+                <li><strong>Taxa PIX Cash In:</strong> Taxa para depósitos PIX</li>
+                <li><strong>Taxa PIX Cash Out:</strong> Taxa para saques PIX</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🌐 Webhooks</h2>
+            <p>Os webhooks da XDPag estão configurados nos seguintes endpoints:</p>
+            <ul>
+                <li><strong>Cash In (Depósitos):</strong> <code>POST /api/xdpag/callback/deposit</code></li>
+                <li><strong>Cash Out (Saques):</strong> <code>POST /api/xdpag/callback/withdraw</code></li>
+                <li><strong>Teste:</strong> <code>POST /api/xdpag/test</code></li>
+            </ul>
+
+            <div class="webhook-example">
+                <h3>📥 Exemplo de Webhook Cash Out (Saque Finalizado)</h3>
+                <pre>{
+    "type": "PAYOUT",
+    "data": {
+        "id": "952b8982-0d14-4c46-a494-7b4028739d56",
+        "externalId": "b909a9b0-91f3-4488-b3d4-e314aeb0b75b",
+        "amount": "1",
+        "document": "77148745039",
+        "original_amount": "1",
+        "status": "FINISHED",
+        "endToEndId": "E3305353220241202194904482e134f1",
+        "receipt": "https://api.xdpag.com/receipt/E3305353220241202194904482e134f1/payout",
+        "fee": "0.00",
+        "metadata": [],
+        "refunds": []
+    }
+}</pre>
+            </div>
+
+            <div class="webhook-example">
+                <h3>🔄 Exemplo de Webhook Cash Out (Saque Revertido)</h3>
+                <pre>{
+    "type": "PAYOUT",
+    "data": {
+        "id": "952b8982-0d14-4c46-a494-7b4028739d56",
+        "externalId": "b909a9b0-91f3-4488-b3d4-e314aeb0b75b",
+        "amount": 1,
+        "document": "77148745039",
+        "original_amount": 1,
+        "status": "REVERSED",
+        "endToEndId": "E3305353220241202194904482e134f1",
+        "receipt": "https://api.xdpag.com/receipt/E3305353220241202194904482e134f1/payout",
+        "fee": "0.03",
+        "metadata": [],
+        "refunds": [
+            {
+                "id": "5fdd5c3a-5067-4d82-937a-4de11c879492",
+                "amount": 1,
+                "order_id": "952b8982-0d14-4c46-a494-7b4028739d56",
+                "description": "",
+                "endToEnd": "D3581087120241208193539241350211",
+                "created_at": "2024-12-11T04:52:04.000000Z",
+                "updated_at": "2024-12-11T04:52:04.000000Z"
+            }
+        ]
+    }
+}</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Teste de Webhook</h2>
+            <p>Use o formulário abaixo para testar os webhooks da XDPag:</p>
+
+            <div class="form-group">
+                <label for="webhookType">Tipo de Webhook:</label>
+                <select id="webhookType">
+                    <option value="deposit">Cash In (Depósito)</option>
+                    <option value="withdraw">Cash Out (Saque)</option>
+                    <option value="test">Teste</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="webhookData">Dados do Webhook (JSON):</label>
+                <textarea id="webhookData" rows="10" placeholder="Cole aqui os dados JSON do webhook..."></textarea>
+            </div>
+
+            <button onclick="testWebhook()">🚀 Testar Webhook</button>
+            <button onclick="loadExample()">📋 Carregar Exemplo</button>
+
+            <div id="webhookResponse" class="response" style="display: none;"></div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Funcionalidades Implementadas</h2>
+            <ul>
+                <li>✅ <strong>Model XDPag:</strong> Gerenciamento de configurações</li>
+                <li>✅ <strong>Service XDPagService:</strong> Integração com API</li>
+                <li>✅ <strong>Controller XDPagController:</strong> Processamento de webhooks</li>
+                <li>✅ <strong>Trait XDPagTrait:</strong> Lógica de negócio para saques</li>
+                <li>✅ <strong>Webhooks:</strong> Cash In e Cash Out</li>
+                <li>✅ <strong>Controle de Taxas:</strong> Configurável via admin</li>
+                <li>✅ <strong>Interface Admin:</strong> Configuração via painel</li>
+                <li>✅ <strong>Logs:</strong> Rastreamento completo de operações</li>
+                <li>✅ <strong>Validação:</strong> Middleware de segurança</li>
+                <li>✅ <strong>Callbacks:</strong> Notificações para sistemas externos</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🔗 URLs Importantes</h2>
+            <ul>
+                <li><strong>Admin - Adquirentes:</strong> <a href="/admin/ajustes/adquirentes"
+                        target="_blank">/admin/ajustes/adquirentes</a></li>
+                <li><strong>Webhook Cash In:</strong> <code>{{APP_URL}}/api/xdpag/callback/deposit</code></li>
+                <li><strong>Webhook Cash Out:</strong> <code>{{APP_URL}}/api/xdpag/callback/withdraw</code></li>
+                <li><strong>Teste Webhook:</strong> <code>{{APP_URL}}/api/xdpag/test</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function testWebhook() {
+            const webhookType = document.getElementById('webhookType').value;
+            const webhookData = document.getElementById('webhookData').value;
+            const responseDiv = document.getElementById('webhookResponse');
+
+            if (!webhookData.trim()) {
+                showResponse('Por favor, insira os dados do webhook.', 'error');
+                return;
+            }
+
+            try {
+                JSON.parse(webhookData); // Validar JSON
+            } catch (e) {
+                showResponse('JSON inválido: ' + e.message, 'error');
+                return;
+            }
+
+            const endpoint = `/api/xdpag/callback/${webhookType}`;
+
+            showResponse('Enviando webhook para: ' + endpoint + '\n\nAguarde...', 'info');
+
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: webhookData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    showResponse('Resposta do servidor:\n\n' + JSON.stringify(data, null, 2), 'success');
+                })
+                .catch(error => {
+                    showResponse('Erro na requisição:\n\n' + error.message, 'error');
+                });
+        }
+
+        function loadExample() {
+            const webhookType = document.getElementById('webhookType').value;
+            const webhookData = document.getElementById('webhookData');
+
+            let exampleData = '';
+
+            switch (webhookType) {
+                case 'deposit':
+                    exampleData = {
+                        "type": "PAYMENT",
+                        "data": {
+                            "id": "12345678-1234-1234-1234-123456789012",
+                            "external_id": "test-external-id-123",
+                            "amount": "100.00",
+                            "status": "FINISHED",
+                            "payer": {
+                                "name": "João Silva",
+                                "document": "12345678901",
+                                "email": "redacted@example.invalid"
+                            },
+                            "created_at": "2024-12-01T10:00:00Z",
+                            "paid_at": "2024-12-01T10:05:00Z"
+                        }
+                    };
+                    break;
+                case 'withdraw':
+                    exampleData = {
+                        "type": "PAYOUT",
+                        "data": {
+                            "id": "952b8982-0d14-4c46-a494-7b4028739d56",
+                            "externalId": "b909a9b0-91f3-4488-b3d4-e314aeb0b75b",
+                            "amount": "1",
+                            "document": "77148745039",
+                            "original_amount": "1",
+                            "status": "FINISHED",
+                            "endToEndId": "E3305353220241202194904482e134f1",
+                            "receipt": "https://api.xdpag.com/receipt/E3305353220241202194904482e134f1/payout",
+                            "fee": "0.00",
+                            "metadata": [],
+                            "refunds": []
+                        }
+                    };
+                    break;
+                case 'test':
+                    exampleData = {
+                        "test": true,
+                        "message": "Teste de webhook XDPag",
+                        "timestamp": new Date().toISOString(),
+                        "data": {
+                            "type": "test",
+                            "status": "success"
+                        }
+                    };
+                    break;
+            }
+
+            webhookData.value = JSON.stringify(exampleData, null, 2);
+        }
+
+        function showResponse(message, type) {
+            const responseDiv = document.getElementById('webhookResponse');
+            responseDiv.textContent = message;
+            responseDiv.className = 'response ' + type;
+            responseDiv.style.display = 'block';
+        }
+
+        // Carregar exemplo ao mudar o tipo
+        document.getElementById('webhookType').addEventListener('change', loadExample);
+
+        // Carregar exemplo inicial
+        loadExample();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Badges - EXEMPLO</title>
+    <link rel="stylesheet" href="/css/tail.css">
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .badge {
+            margin: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Teste de Badges - Modo Light</h1>
+
+    <div class="test-section">
+        <h2>Badges de Status</h2>
+        <span class="badge badge-sm bg-success gateway-badge-success">Aprovado</span>
+        <span class="badge badge-sm bg-warning">Pendente</span>
+        <span class="badge badge-sm bg-danger">Cancelado</span>
+        <span class="badge badge-sm bg-info">A Liberar</span>
+    </div>
+
+    <div class="test-section">
+        <h2>Teste de Cores CSS</h2>
+        <div style="background: hsl(142.1 70.6% 45.3%); color: white; padding: 10px; margin: 5px; border-radius: 4px;">
+            Cor Success: hsl(142.1 70.6% 45.3%)
+        </div>
+        <div style="background: hsl(47.9 95.8% 53.1%); color: black; padding: 10px; margin: 5px; border-radius: 4px;">
+            Cor Warning: hsl(47.9 95.8% 53.1%)
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Instruções</h2>
+        <p>1. Verifique se o badge "Aprovado" aparece em verde</p>
+        <p>2. Teste alternando entre modo light e dark</p>
+        <p>3. Verifique se o texto está legível</p>
+    </div>
+</body>
+
+</html>

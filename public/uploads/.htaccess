@@ -1,0 +1,32 @@
+# Arquivo de segurança para pasta uploads
+# Este arquivo deve ser renomeado para .htaccess na pasta uploads
+
+# Bloquear execução de PHP em uploads
+<Files "*.php">
+    Order Deny,Allow
+    Deny from all
+</Files>
+
+# Bloquear outros tipos de arquivos executáveis
+<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|sh|cgi)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Permitir apenas tipos de arquivo seguros
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|pdf|doc|docx|xls|xlsx|txt|zip|rar)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Bloquear acesso direto a arquivos PHP
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} \.php$
+RewriteRule ^(.*)$ - [F,L]
+
+# Headers de segurança
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>

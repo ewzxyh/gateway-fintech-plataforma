@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Integração Pagar.me - EXEMPLO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .test-section h3 {
+            color: #555;
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🧪 Teste Integração Pagar.me - EXEMPLO</h1>
+
+        <div class="test-section">
+            <h3>📊 Status da Integração</h3>
+            <p><strong>Webhook URL:</strong> https://demo.gateway.shop/pagarme/webhook</p>
+            <p><strong>Status:</strong> <span style="color: green;">✅ Atualizado com nova lógica baseada na
+                    PrimePay7</span></p>
+            <p><strong>Funcionalidades:</strong></p>
+            <ul>
+                <li>✅ Sistema de webhooks atualizado</li>
+                <li>✅ Sistema de saldo integrado</li>
+                <li>✅ Pagamentos PIX (depósito e saque)</li>
+                <li>✅ Pagamentos com cartão de crédito</li>
+                <li>✅ Pagamentos com boleto bancário</li>
+                <li>✅ Suporte a parcelamento</li>
+                <li>✅ Logs detalhados para debugging</li>
+                <li>✅ Compatibilidade com sistema antigo</li>
+                <li>✅ Integração com gateway global Cartão+Boleto</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>💰 Teste de Depósito PIX</h3>
+            <form id="depositForm">
+                <div class="form-group">
+                    <label for="depositAmount">Valor (R$):</label>
+                    <input type="number" id="depositAmount" name="amount" step="0.01" min="1" value="10.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="depositName">Nome do Cliente:</label>
+                    <input type="text" id="depositName" name="debtor_name" value="João Silva" required>
+                </div>
+                <div class="form-group">
+                    <label for="depositEmail">Email:</label>
+                    <input type="email" id="depositEmail" name="email" value="redacted@example.invalid" required>
+                </div>
+                <div class="form-group">
+                    <label for="depositPhone">Telefone:</label>
+                    <input type="text" id="depositPhone" name="phone" value="11999999999" required>
+                </div>
+                <button type="submit">Gerar QR Code PIX</button>
+            </form>
+            <div id="depositResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>💳 Teste de Pagamento com Cartão</h3>
+            <form id="cardForm">
+                <div class="form-group">
+                    <label for="cardAmount">Valor (R$):</label>
+                    <input type="number" id="cardAmount" name="amount" step="0.01" min="1" value="50.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardNumber">Número do Cartão:</label>
+                    <input type="text" id="cardNumber" name="card_number" value="4111111111111111" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardHolder">Nome no Cartão:</label>
+                    <input type="text" id="cardHolder" name="card_holder_name" value="João Silva" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardExpMonth">Mês:</label>
+                    <input type="number" id="cardExpMonth" name="card_exp_month" min="1" max="12" value="12" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardExpYear">Ano:</label>
+                    <input type="number" id="cardExpYear" name="card_exp_year" min="2024" value="2030" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardCvv">CVV:</label>
+                    <input type="text" id="cardCvv" name="card_cvv" value="123" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardInstallments">Parcelas:</label>
+                    <select id="cardInstallments" name="installments" required>
+                        <option value="1">1x</option>
+                        <option value="2">2x</option>
+                        <option value="3">3x</option>
+                        <option value="6">6x</option>
+                        <option value="12">12x</option>
+                    </select>
+                </div>
+                <button type="submit">Processar Cartão</button>
+            </form>
+            <div id="cardResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🧾 Teste de Pagamento com Boleto</h3>
+            <form id="boletoForm">
+                <div class="form-group">
+                    <label for="boletoAmount">Valor (R$):</label>
+                    <input type="number" id="boletoAmount" name="amount" step="0.01" min="1" value="25.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="boletoName">Nome do Cliente:</label>
+                    <input type="text" id="boletoName" name="customer_name" value="João Silva" required>
+                </div>
+                <div class="form-group">
+                    <label for="boletoEmail">Email:</label>
+                    <input type="email" id="boletoEmail" name="customer_email" value="redacted@example.invalid" required>
+                </div>
+                <div class="form-group">
+                    <label for="boletoDocument">CPF:</label>
+                    <input type="text" id="boletoDocument" name="customer_document" value="12345678901" required>
+                </div>
+                <div class="form-group">
+                    <label for="boletoPhone">Telefone:</label>
+                    <input type="text" id="boletoPhone" name="customer_phone" value="11999999999" required>
+                </div>
+                <button type="submit">Gerar Boleto</button>
+            </form>
+            <div id="boletoResult" class="result" style="display: none;"></div>
+        </div>
+        <form id="withdrawForm">
+            <div class="form-group">
+                <label for="withdrawAmount">Valor (R$):</label>
+                <input type="number" id="withdrawAmount" name="amount" step="0.01" min="1" value="5.00" required>
+            </div>
+            <div class="form-group">
+                <label for="pixKey">Chave PIX:</label>
+                <input type="text" id="pixKey" name="pixKey" value="11999999999" required>
+            </div>
+            <div class="form-group">
+                <label for="pixKeyType">Tipo da Chave:</label>
+                <select id="pixKeyType" name="pixKeyType" required>
+                    <option value="phone">Telefone</option>
+                    <option value="cpf">CPF</option>
+                    <option value="email">Email</option>
+                    <option value="evp">Chave Aleatória</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="beneficiaryName">Nome do Beneficiário:</label>
+                <input type="text" id="beneficiaryName" name="beneficiary_name" value="João Silva" required>
+            </div>
+            <button type="submit">Solicitar Saque</button>
+        </form>
+        <div id="withdrawResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔍 Teste de Webhook</h3>
+        <p>Para testar o webhook, configure no painel do Pagar.me:</p>
+        <p><strong>URL:</strong> https://demo.gateway.shop/pagarme/webhook</p>
+        <p><strong>Eventos:</strong> order.paid, transaction.paid, transaction.failed</p>
+        <button onclick="testWebhook()">Simular Webhook</button>
+        <div id="webhookResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>📋 Logs e Debugging</h3>
+        <p>Os logs detalhados estão disponíveis em:</p>
+        <ul>
+            <li><code>storage/logs/laravel.log</code></li>
+            <li>Busque por: <code>PAGAR.ME</code>, <code>PagarMeTrait</code>, <code>PagarMeController</code></li>
+        </ul>
+        <button onclick="checkLogs()">Verificar Logs Recentes</button>
+        <div id="logsResult" class="result" style="display: none;"></div>
+    </div>
+    </div>
+
+    <script>
+        // Teste de Depósito
+        document.getElementById('depositForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const resultDiv = document.getElementById('depositResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Gerando QR Code PIX...';
+
+            const formData = new FormData(this);
+            formData.append('baasPostbackUrl', 'web');
+
+            try {
+                const response = await fetch('/api/deposit', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getAuthToken(),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+
+                const data = await response.json();
+
+                if (data.status === 200) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+✅ Depósito solicitado com sucesso!
+
+ID da Transação: ${data.data.idTransaction}
+QR Code: ${data.data.qrcode}
+URL da Imagem: ${data.data.qr_code_image_url}
+
+Dados completos:
+${JSON.stringify(data, null, 2)}
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = '❌ Erro: ' + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Erro na requisição: ' + error.message;
+            }
+        });
+
+        // Teste de Cartão
+        document.getElementById('cardForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const resultDiv = document.getElementById('cardResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Processando pagamento com cartão...';
+
+            const formData = new FormData(this);
+            formData.append('baasPostbackUrl', 'web');
+
+            try {
+                const response = await fetch('/api/card', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getAuthToken(),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+
+                const data = await response.json();
+
+                if (data.status === 200) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+✅ Pagamento com cartão processado com sucesso!
+
+ID da Transação: ${data.data.idTransaction}
+Status: ${data.data.status}
+Valor: R$ ${data.data.amount}
+Parcelas: ${data.data.installments}x
+Método: ${data.data.payment_method}
+
+Dados completos:
+${JSON.stringify(data, null, 2)}
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = '❌ Erro: ' + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Erro na requisição: ' + error.message;
+            }
+        });
+
+        // Teste de Boleto
+        document.getElementById('boletoForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const resultDiv = document.getElementById('boletoResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Gerando boleto bancário...';
+
+            const formData = new FormData(this);
+            formData.append('baasPostbackUrl', 'web');
+
+            try {
+                const response = await fetch('/api/boleto', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getAuthToken(),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+
+                const data = await response.json();
+
+                if (data.status === 200) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+✅ Boleto gerado com sucesso!
+
+ID da Transação: ${data.data.idTransaction}
+Status: ${data.data.status}
+Valor: R$ ${data.data.amount}
+Método: ${data.data.payment_method}
+URL do Boleto: ${data.data.boleto_url}
+Código de Barras: ${data.data.boleto_barcode}
+
+Dados completos:
+${JSON.stringify(data, null, 2)}
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = '❌ Erro: ' + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Erro na requisição: ' + error.message;
+            }
+        });
+
+        // Teste de Saque
+        document.getElementById('withdrawForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const resultDiv = document.getElementById('withdrawResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Processando saque...';
+
+            const formData = new FormData(this);
+            formData.append('baasPostbackUrl', 'web');
+
+            try {
+                const response = await fetch('/api/saque', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getAuthToken(),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+
+                const data = await response.json();
+
+                if (data.status === 200) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+✅ Saque solicitado com sucesso!
+
+ID da Transação: ${data.data.idTransaction}
+Status: ${data.data.status}
+Valor: R$ ${data.data.amount}
+Valor Líquido: R$ ${data.data.cash_out_liquido}
+Taxa: R$ ${data.data.taxa_cash_out}
+
+Dados completos:
+${JSON.stringify(data, null, 2)}
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = '❌ Erro: ' + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Erro na requisição: ' + error.message;
+            }
+        });
+
+        // Função para obter token de autenticação (implementar conforme necessário)
+        function getAuthToken() {
+            // Implementar lógica de autenticação
+            return 'your-auth-token-here';
+        }
+
+        // Teste de Webhook
+        function testWebhook() {
+            const resultDiv = document.getElementById('webhookResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = `
+🔍 Para testar o webhook:
+
+1. Configure no painel do Pagar.me:
+   - URL: https://demo.gateway.shop/pagarme/webhook
+   - Eventos: order.paid, transaction.paid, transaction.failed
+
+2. Faça uma transação real no Pagar.me
+
+3. Verifique os logs em storage/logs/laravel.log
+
+4. Procure por mensagens como:
+   - "WEBHOOK PAGAR.ME RECEBIDO"
+   - "PagarMeController"
+   - "PagarMeTrait"
+            `;
+        }
+
+        // Verificar Logs
+        function checkLogs() {
+            const resultDiv = document.getElementById('logsResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = `
+📋 Para verificar os logs:
+
+1. Acesse o servidor via SSH
+2. Execute: tail -f storage/logs/laravel.log | grep -i "pagarme"
+3. Ou execute: tail -f storage/logs/laravel.log | grep -i "pagar.me"
+
+Os logs incluem:
+- Dados recebidos nos webhooks
+- Processamento de transações
+- Erros e exceções
+- Status de pagamentos
+            `;
+        }
+    </script>
+</body>
+
+</html>
